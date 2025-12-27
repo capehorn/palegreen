@@ -1,4 +1,4 @@
-function createApp(){
+export function createApp(){
     let app = {};
     app.view = {};
     app._emitter = createNanoEvents();
@@ -51,7 +51,7 @@ function createNanoEvents() {
 }
 
 // https://github.com/ai/nanoid (MIT)
-function nanoid(e=8){
+export function nanoid(e=8){
   let a="useandom-26T198340PX75pxJACKVERYMINDBUSHWOLF_GQZbfghjklqvwyzrict";
   let t="",r=crypto.getRandomValues(new Uint8Array(e));
   for(let n=0;n<e;n++){t+=a[63&r[n]];}

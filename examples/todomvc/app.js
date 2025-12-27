@@ -1,3 +1,5 @@
+import { createApp, nanoid } from "../../index.js";
+
 let app = createApp();
 app.root = document;
 
