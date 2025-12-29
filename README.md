@@ -6,4 +6,4 @@ Maybe it's a bit of exaduration to call this as a library. It is rather a little
 // TODO : counter example here
 
 #### Examples
-Please take a look at the examples directory of this repo. You can try them out following the repo checkout using a local web server.
+In the examples directory of this repo, following a checkout, you can try them out using a local web server.
