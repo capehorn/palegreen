@@ -4,6 +4,7 @@ let app = createApp();
 app.root = document;
 
 let todos = [];
+let filter = "all"; // active, completed
 let Action = function(){}
 
 Action.prototype = {
@@ -57,8 +58,9 @@ Action.prototype = {
         return removedTodos;
     },
     
-    filter: function(filterType) {
-        return filterType;
+    applyFilter: function(filterType) {
+        filter = filterType;
+        return filter;
     },
 
     createTodo: function(name) {
@@ -119,16 +121,10 @@ TodoList.prototype = {
         app.on(action.addTodo, addedTodo => this.sel().insertAdjacentElement("beforeend", app.view.TodoItem.buildView(addedTodo)));
         app.on(action.deleteTodo, todoId => app.view.TodoItem.sel(todoId).remove());
         app.on(action.clearCompleted, removedTodos => removedTodos.forEach(todo => app.view.TodoItem.sel(todo.id).remove()));
-        app.on(action.filter, filterType => {
+        app.on(action.applyFilter, filterType => {
             let todoElements = this.sel().querySelectorAll('li');
-            let lookupTodoStatus = new Map(todos.map(todo => [todo.id, todo.active]));
-            if ("all" === filterType) {
-                todoElements.forEach(todoElem => todoElem.style.display = "block");
-            } else if ("active" === filterType) {
-                todoElements.forEach(todoElem => todoElem.style.display = lookupTodoStatus.get(todoElem.dataset.todoId) ? "block" : "none");
-            } else if ("completed" === filterType) {
-                todoElements.forEach(todoElem => todoElem.style.display = lookupTodoStatus.get(todoElem.dataset.todoId) ? "none" : "block");
-            }
+            let lookup = new Map(todos.map(todo => [todo.id, todo]));
+            todoElements.forEach(todoElem => app.view.TodoItem.setDisplay(todoElem, lookup.get(todoElem.dataset.todoId), filterType));
         });
         app.on(action.toggleAll, () => {
             let todoElements = this.sel().querySelectorAll('li');
@@ -142,7 +138,11 @@ let TodoItem = function(){};
 TodoItem.prototype = {
     sel: (todoId) => app.root.querySelector('li[data-todo-id="'+todoId+'"]'),
     init: function() {
-        app.on(action.setTodoStatus, todo => this.sel(todo.id).className = todo.active ? "view" : "completed");
+        app.on(action.setTodoStatus, todo => {
+            let todoElem = this.sel(todo.id);
+            todoElem.className = todo.active ? "view" : "completed";
+            this.setDisplay(todoElem, todo, filter);
+        });
     },
   
     buildView: function(todo) {
@@ -151,6 +151,7 @@ TodoItem.prototype = {
         let todoElem = clone.children[0];
         todoElem.dataset.todoId = todo.id;
         this.setStatus(todoElem, todo);
+        this.setDisplay(todoElem, todo, filter);
         let label = todoElem.querySelector('label');
         label.textContent = todo.name;
         label.contentEditable = "true";
@@ -175,6 +176,16 @@ TodoItem.prototype = {
         let inputCompleted = todoElem.querySelector('input.toggle');
         inputCompleted.checked = !todo.active;
         inputCompleted.addEventListener("change", e => app.do(action.setTodoStatus, todo.id, !todo.active).trigger(action.inform));
+    },
+    
+    setDisplay: function(todoElem, todo, filterType){
+        if ("all" === filterType) {
+            todoElem.style.display = "block";
+        } else if ("active" === filterType) {
+            todoElem.style.display = todo.active ? "block" : "none";
+        } else if ("completed" === filterType) {
+            todoElem.style.display = todo.active ? "none" : "block";
+        }
     }
 };
 
@@ -198,23 +209,24 @@ TodoFooter.prototype = {
             btnClearCompleted.style.visibility = inform.countActiveTodos < inform.countAllTodos ? "visible" : "hidden";
         });
         
-        aAll.addEventListener("click", e => {app.do(action.filter, "all"); this.selectFilter("all", aAll, aActive, aCompleted);});
-        aActive.addEventListener("click", e => {app.do(action.filter, "active"); this.selectFilter("active", aAll, aActive, aCompleted);});
-        aCompleted.addEventListener("click", e => {app.do(action.filter, "completed"); this.selectFilter("completed", aAll, aActive, aCompleted);});
+        let unselectFilter = () => {
+            aAll.classList.remove("selected"); 
+            aActive.classList.remove("selected"); 
+            aCompleted.classList.remove("selected");
+        };
+        
+        let filterMap = new Map();
+        filterMap.set("all", aAll);
+        filterMap.set("active", aActive);
+        filterMap.set("completed", aCompleted);
+        filterMap.forEach((elem, filterType) => elem.addEventListener("click", e => {
+            app.do(action.applyFilter, filterType); 
+            unselectFilter(); 
+            elem.classList.add("selected");
+        }));
+        
         btnClearCompleted.addEventListener("click", e => app.do(action.clearCompleted).trigger(action.inform));
     },
-    selectFilter: function(filterType, aAll, aActive, aCompleted) {
-        aAll.classList.remove("selected");
-        aActive.classList.remove("selected");
-        aCompleted.classList.remove("selected");
-        if ("all" === filterType) {
-            aAll.classList.add("selected");
-        } else if ("active" === filterType) {
-            aActive.classList.add("selected");
-        } else if ("completed" === filterType) {
-            aCompleted.classList.add("selected");
-        }
-    }
 };
 
 app.action = action;

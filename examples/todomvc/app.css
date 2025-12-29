@@ -264,6 +264,7 @@ body {
 }
 
 .footer {
+    display: none;
 	padding: 10px 15px;
 	height: 20px;
 	text-align: center;
