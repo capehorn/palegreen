@@ -3,7 +3,7 @@
 
 This is an experiment about writing web UI with vanilla JS (no virtual DOM, no signal, no reactive library or any similar mainstream concept) using only a wrapped event emitter and some coding convention.
 
-A counter example:
+A counter:
 ```
 <main>
     <p class="counter-value">0</p>
@@ -47,6 +47,5 @@ A counter example:
 </script>
 ```
 
-
 #### Examples
-In the examples directory of this repo, following a checkout, you can try them out using a local web server.
+You can find some in the examples directory of this repo, following a repo checkout, you can try them out using a local web server.
