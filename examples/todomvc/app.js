@@ -217,7 +217,7 @@ TodoFooter.prototype = {
     }
 };
 
-app.action = new Action();
+app.action = action;
 
 app.addView(TodoNew);
 app.addView(ToggleAll);
