@@ -20,7 +20,7 @@ export function createApp(){
     };
     
     app.addView = view => {
-        app.view[view.name] = new view();
+        app.view[view.name] = new view(app);
         app.view[view.name].init(); 
     };
     return app;
