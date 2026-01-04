@@ -7,10 +7,10 @@ export let ArticlePage = function(app){
 ArticlePage.prototype = {
   sel: function(){ return this.app.root.querySelector('div[data-pg-elem="article-page"]'); },
   init: function() {
-    // this.app.on(this.app.action.showArticle, article => {
-      // let elemArticle = this.buildView(article);
+    this.app.on(this.app.action.showArticle, article => {
+      let elemArticle = this.buildView(article);
       
-    // });
+    });
     
     
     

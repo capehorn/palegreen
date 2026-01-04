@@ -1,18 +1,5 @@
 import { formatDate } from "./utils.js";
 
-export let ArticleList = function(app){
-  this.app = app;
-};
-ArticleList.prototype = {
-  sel: function(){ return this.app.root.querySelector('div[data-pg-elem="article-list"]'); },
-  init: function() {
-    let elem = this.sel();
-    this.app.on(this.app.action.notifyApiCallSuccess, fnAction => {
-      this.app.model.articles.forEach(article => elem.insertAdjacentElement("beforeend", this.app.view.ArticlePreview.buildView(article)));
-    });
-  },
-};
-
 export let ArticlePreview = function(app){
   this.app = app;
 };
@@ -23,9 +10,7 @@ ArticlePreview.prototype = {
   },
   
   buildView: function(article) {
-    let template = this.app.root.querySelector('template#article-preview');
-    let clone = document.importNode(template.content, true);
-    let elem = clone.children[0];
+    let elem = viewArticlePreview();
     elem.dataset.articleId = article.id;
     let elemArticleLink = elem.querySelector('[data-pg-elem="article-link"]');
     elemArticleLink.setAttribute("href", "#/article/" + article.slug);
@@ -38,3 +23,29 @@ ArticlePreview.prototype = {
     return elem;
   }
 };
+
+function viewArticlePreview() {
+  return Document.parseHTMLUnsafe(`
+  <div class="article-preview" data-article-id="">
+    <div class="article-meta">
+      <a href="/profile/eric-simons"><img src="http://i.imgur.com/Qr71crq.jpg" /></a>
+      <div class="info">
+        <a href="/profile/eric-simons" class="author" data-pg-elem="author"></a>
+        <span class="date" data-pg-elem="date"></span><!--January 20th-->
+      </div>
+      <button class="btn btn-outline-primary btn-sm pull-xs-right">
+        <i class="ion-heart"></i> 29
+      </button>
+    </div>
+    <a href="" class="preview-link" data-pg-elem="article-link">
+      <h1 data-pg-elem="title"></h1>
+      <p data-pg-elem="desc"></p>
+      <span>Read more...</span>
+      <ul class="tag-list">
+        <li class="tag-default tag-pill tag-outline">realworld</li>
+        <li class="tag-default tag-pill tag-outline">implementations</li>
+      </ul>
+    </a>
+  </div>
+  `).body.firstChild;
+}

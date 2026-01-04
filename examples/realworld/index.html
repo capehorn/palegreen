@@ -19,23 +19,22 @@
   </head>
   <body>
     <nav class="navbar navbar-light">
-      <div class="container">
-        <a class="navbar-brand" href="/">conduit</a>
-        <ul class="nav navbar-nav pull-xs-right">
-          <li class="nav-item">
-            <!-- Add "active" class when you're on that page" -->
-            <a class="nav-link active" href="/">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/login">Sign in</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/register">Sign up</a>
-          </li>
-        </ul>
-      </div>
     </nav>
     <main>
+    </main>
+    <footer>
+      <div class="container">
+        <a href="/" class="logo-font">conduit</a>
+        <span class="attribution">
+          An interactive learning project from <a href="https://thinkster.io">Thinkster</a>. Code &amp;
+          design licensed under MIT.
+        </span>
+      </div>
+    </footer>
+    
+    <!-- TEMPLATES -->
+    <!-- ARTICLES' LIST PAGE (HOME PAGE) -->
+    <template id="articles-page">
       <div class="home-page">
         <div class="banner">
           <div class="container">
@@ -59,29 +58,6 @@
               </div>
               <div data-pg-elem="article-list">
                 <!-- TEMPLATE article preview -->
-                <template id="article-preview">
-                  <div class="article-preview" data-article-id="">
-                    <div class="article-meta">
-                      <a href="/profile/eric-simons"><img src="http://i.imgur.com/Qr71crq.jpg" /></a>
-                      <div class="info">
-                        <a href="/profile/eric-simons" class="author" data-pg-elem="author"></a>
-                        <span class="date" data-pg-elem="date"></span><!--January 20th-->
-                      </div>
-                      <button class="btn btn-outline-primary btn-sm pull-xs-right">
-                        <i class="ion-heart"></i> 29
-                      </button>
-                    </div>
-                    <a href="" class="preview-link" data-pg-elem="article-link">
-                      <h1 data-pg-elem="title"></h1>
-                      <p data-pg-elem="desc"></p>
-                      <span>Read more...</span>
-                      <ul class="tag-list">
-                        <li class="tag-default tag-pill tag-outline">realworld</li>
-                        <li class="tag-default tag-pill tag-outline">implementations</li>
-                      </ul>
-                    </a>
-                  </div>
-                </template>
               </div>
 
               <ul class="pagination">
@@ -113,19 +89,33 @@
           </div>
         </div>
       </div>
-    </main>
-    <footer>
-      <div class="container">
-        <a href="/" class="logo-font">conduit</a>
-        <span class="attribution">
-          An interactive learning project from <a href="https://thinkster.io">Thinkster</a>. Code &amp;
-          design licensed under MIT.
-        </span>
+    </template>
+    
+    <template id="article-preview">
+      <div class="article-preview" data-article-id="">
+        <div class="article-meta">
+          <a href="/profile/eric-simons"><img src="http://i.imgur.com/Qr71crq.jpg" /></a>
+          <div class="info">
+            <a href="/profile/eric-simons" class="author" data-pg-elem="author"></a>
+            <span class="date" data-pg-elem="date"></span><!--January 20th-->
+          </div>
+          <button class="btn btn-outline-primary btn-sm pull-xs-right">
+            <i class="ion-heart"></i> 29
+          </button>
+        </div>
+        <a href="" class="preview-link" data-pg-elem="article-link">
+          <h1 data-pg-elem="title"></h1>
+          <p data-pg-elem="desc"></p>
+          <span>Read more...</span>
+          <ul class="tag-list">
+            <li class="tag-default tag-pill tag-outline">realworld</li>
+            <li class="tag-default tag-pill tag-outline">implementations</li>
+          </ul>
+        </a>
       </div>
-    </footer>
+    </template>
     
-    <!-- TEMPLATES -->
-    
+    <!-- ARTICLE PAGE -->
     <template id="article-page">
       <div class="article-page" data-pg-elem="article-page">
         <div class="banner">
@@ -252,6 +242,170 @@
       </div>
     </template>
     
+    <!-- LOGIN PAGE -->
+    <template id="login-page">
+      <div class="auth-page">
+        <div class="container page">
+          <div class="row">
+            <div class="col-md-6 offset-md-3 col-xs-12">
+              <h1 class="text-xs-center">Sign in</h1>
+              <p class="text-xs-center">
+                <a href="/register">Need an account?</a>
+              </p>
+
+              <ul class="error-messages">
+                <li>That email is already taken</li>
+              </ul>
+
+              <form>
+                <fieldset class="form-group">
+                  <input class="form-control form-control-lg" type="text" placeholder="Email" />
+                </fieldset>
+                <fieldset class="form-group">
+                  <input class="form-control form-control-lg" type="password" placeholder="Password" />
+                </fieldset>
+                <button class="btn btn-lg btn-primary pull-xs-right">Sign in</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+    
+    <!-- REGISTER PAGE -->
+    <template>
+      <div class="auth-page">
+        <div class="container page">
+          <div class="row">
+            <div class="col-md-6 offset-md-3 col-xs-12">
+              <h1 class="text-xs-center">Sign up</h1>
+              <p class="text-xs-center">
+                <a href="/login">Have an account?</a>
+              </p>
+
+              <ul class="error-messages">
+                <li>That email is already taken</li>
+              </ul>
+
+              <form>
+                <fieldset class="form-group">
+                  <input class="form-control form-control-lg" type="text" placeholder="Username" />
+                </fieldset>
+                <fieldset class="form-group">
+                  <input class="form-control form-control-lg" type="text" placeholder="Email" />
+                </fieldset>
+                <fieldset class="form-group">
+                  <input class="form-control form-control-lg" type="password" placeholder="Password" />
+                </fieldset>
+                <button class="btn btn-lg btn-primary pull-xs-right">Sign up</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+    
+    <!-- PROFILE PAGE -->
+    <template>
+      <div class="profile-page">
+        <div class="user-info">
+          <div class="container">
+            <div class="row">
+              <div class="col-xs-12 col-md-10 offset-md-1">
+                <img src="http://i.imgur.com/Qr71crq.jpg" class="user-img" />
+                <h4>Eric Simons</h4>
+                <p>
+                  Cofounder @GoThinkster, lived in Aol's HQ for a few months, kinda looks like Peeta from
+                  the Hunger Games
+                </p>
+                <button class="btn btn-sm btn-outline-secondary action-btn">
+                  <i class="ion-plus-round"></i>
+                  &nbsp; Follow Eric Simons
+                </button>
+                <button class="btn btn-sm btn-outline-secondary action-btn">
+                  <i class="ion-gear-a"></i>
+                  &nbsp; Edit Profile Settings
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="container">
+          <div class="row">
+            <div class="col-xs-12 col-md-10 offset-md-1">
+              <div class="articles-toggle">
+                <ul class="nav nav-pills outline-active">
+                  <li class="nav-item">
+                    <a class="nav-link active" href="">My Articles</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="">Favorited Articles</a>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="article-preview">
+                <div class="article-meta">
+                  <a href="/profile/eric-simons"><img src="http://i.imgur.com/Qr71crq.jpg" /></a>
+                  <div class="info">
+                    <a href="/profile/eric-simons" class="author">Eric Simons</a>
+                    <span class="date">January 20th</span>
+                  </div>
+                  <button class="btn btn-outline-primary btn-sm pull-xs-right">
+                    <i class="ion-heart"></i> 29
+                  </button>
+                </div>
+                <a href="/article/how-to-buil-webapps-that-scale" class="preview-link">
+                  <h1>How to build webapps that scale</h1>
+                  <p>This is the description for the post.</p>
+                  <span>Read more...</span>
+                  <ul class="tag-list">
+                    <li class="tag-default tag-pill tag-outline">realworld</li>
+                    <li class="tag-default tag-pill tag-outline">implementations</li>
+                  </ul>
+                </a>
+              </div>
+
+              <div class="article-preview">
+                <div class="article-meta">
+                  <a href="/profile/albert-pai"><img src="http://i.imgur.com/N4VcUeJ.jpg" /></a>
+                  <div class="info">
+                    <a href="/profile/albert-pai" class="author">Albert Pai</a>
+                    <span class="date">January 20th</span>
+                  </div>
+                  <button class="btn btn-outline-primary btn-sm pull-xs-right">
+                    <i class="ion-heart"></i> 32
+                  </button>
+                </div>
+                <a href="/article/the-song-you" class="preview-link">
+                  <h1>The song you won't ever stop singing. No matter how hard you try.</h1>
+                  <p>This is the description for the post.</p>
+                  <span>Read more...</span>
+                  <ul class="tag-list">
+                    <li class="tag-default tag-pill tag-outline">Music</li>
+                    <li class="tag-default tag-pill tag-outline">Song</li>
+                  </ul>
+                </a>
+              </div>
+
+              <ul class="pagination">
+                <li class="page-item active">
+                  <a class="page-link" href="">1</a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="">2</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+    
+    <!-- SETTINGS PAGE -->
+    <template>
+    </template>
     
     <script type="module" src="js/app.js"></script>
   </body>
