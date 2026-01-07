@@ -1,8 +1,9 @@
 
 
 
-export let Router = function(){
-  this.routes = new Map(); 
+export let Router = function(routingFn){
+  this.routes = new Map();
+  this.routingFn = routingFn;
 };
 
 Router.prototype = {
@@ -16,17 +17,25 @@ Router.prototype = {
     return this;
   },
   
-  match: function(path) {
+  goToPath: function(path) {
     let matchingRoutes = [];
     this.routes.forEach((regExps, name) => {
       regExps.forEach(regExp => {
-        let resultArray = reExp.exec(path);
+        let resultArray = regExp.exec(path);
         if (resultArray != null) {
           console.log("report matching");
+          console.log(resultArray.groups);
+          this.routingFn(name, resultArray.groups);
         }
       });
     });
   },
+  goTo(name, props) {
+    let route = this.routes.get(name);
+    if (route != undefined) {
+      this.routingFn(name, props);
+    }
+  }
 };
 
 export function route(strings, ...rexps) {

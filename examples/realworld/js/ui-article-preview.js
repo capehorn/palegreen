@@ -19,7 +19,7 @@ ArticlePreview.prototype = {
     elem.querySelector('[data-pg-elem="title"]').textContent = article.title;
     elem.querySelector('[data-pg-elem="desc"]').textContent = article.description;
     
-    elemArticleLink.addEventListener("click", e => this.app.do(this.app.action.showArticle, article));
+    elemArticleLink.addEventListener("click", e => this.app.router.goTo("article", {directValue: article}));//do(this.app.action.showArticle, article));
     return elem;
   }
 };

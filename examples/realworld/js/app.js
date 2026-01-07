@@ -1,9 +1,12 @@
 import { createApp } from "../../../index.js";
 import * as API from "./api.js";
 
+import { Router, route } from "../../../packages/router/index.js";
+
 import { Navbar } from "./ui-nav.js";
 import { ArticleList } from "./ui-page-home.js";
 import { ArticlePreview } from "./ui-article-preview.js";
+import { ArticlePage } from "./ui-page-article.js";
 
 let app = createApp();
 app.root = document;
@@ -33,58 +36,35 @@ Action.prototype = {
       });
   },
   showArticles: function() {
-    
+    console.log("Show articles");
   },
   showArticle: function(article) {
     console.log("Show article");
     console.log(article);
   },
-  routing: function(routeObj, popstateEvent) {
+  routing: function(routeName, props) {
     console.log("routing");
-    console.log(routeObj);
-    //console.log(e.state.action);
-    if (routeObj != null) {
-      app.action[routeObj.actionName].call();
+    console.log(routeName);
+    console.log(props)
+    switch(routeName) {
+      case "home": app.do(app.action.showHomePage); break;
+      case "article": app.do(app.action.showArticle, props.directValue); break;
+      default: return;
     }
   },
 };
 
 let action = new Action();
-
 app.action = action;
+
+// register routes
+let router = new Router(app.action.routing);
+router.addRoute("home", `#/`);
+router.addRoute("article", route`#/article/${/(?<articleSlug>[\w-]+)/}`);
+app.router = router;
 
 app.startAt = function(route) {
   history.replaceState({route}, "", route);
-};
-
-app.router = {};
-
-app.router.routes = {
-  home: () => ({
-    route: `#/`,
-    routeProps: {},
-    actionName: app.action.showHomePage.name,
-    popstateEvent: null,
-  }),
-  article: (articleSlug) => ({
-    route: `#/article/${/^(?<articleSlug>[\w-]+)$/}`,
-    routeProps: { articleSlug },
-    actionName: app.action.showArticlePage.name,
-    popstateEvent: null,
-  }),
-  login: {
-    route: ["#", "/", "login", "/", /^(?<username>\w+)$/, "?", ["country", "fr"]],
-  },
-  profile: {
-    
-  },
-  register: {
-    
-  },
-  settings: {
-    
-  }
-  
 };
 
 window.addEventListener('popstate', e => {
@@ -97,21 +77,11 @@ window.addEventListener('popstate', e => {
 app.addView(Navbar);
 app.addView(ArticleList);
 app.addView(ArticlePreview);
+app.addView(ArticlePage);
 
-history.replaceState({routing: "#/"}, "", "#/");
+history.replaceState({routing: "home"}, "", "#/");
+app.router.goTo("home");
 
-app.action.routing(app.router.routes.home());
-
-let routeRegexp = buildRouterRegexp`#/article/${/(?<articleSlug>[\w-]+)/}`;
-function buildRouterRegexp(strings, ...rexps) {
-  const result = [RegExp.escape(strings[0])];
-  rexps.forEach((rexp, i) => {
-    result.push(rexp.source, RegExp.escape(strings[i + 1]));
-  });
-  return new RegExp(result.join(""));
-}
-console.log(routeRegexp.source);
-console.log(routeRegexp.test("#/article/toto"));
 
 
 
